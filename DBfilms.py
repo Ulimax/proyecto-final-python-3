@@ -13,7 +13,8 @@ def create_film_table():   # definimos una funcion que nos crea la base de datos
                    bruto INTEGER NOT NULL,
                    release TEXT NOT NULL,
                    total INTEGER NOT NULL,
-                   studio  TEXT NOT NULL
+                   studio  TEXT NOT NULL,
+                   mesActual TEXT NOT NULL
                    )
                    """) # Creamos la tabla que contendra las peliculas
     
@@ -34,9 +35,9 @@ def insert_data_to_ranking_table(data): # Funcion para la insercion de datos en 
 
     for row in data:
         cursor.execute("""
-            INSERT INTO peliculas (posicion, pelicula, bruto, release, total, studio )
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (row["Posicion"], row["Pelicula"], int(row["Ingreso Bruto"]), row["Fecha de estreno"], int(row["Ingreso Total"]), row["Distribuidora"]))
+            INSERT INTO peliculas (posicion, pelicula, bruto, release, total, studio, mesActual )
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (row["Posicion"], row["Pelicula"], int(row["Ingreso Bruto"]), row["Fecha de estreno"], int(row["Ingreso Total"]), row["Distribuidora"], row["Mes actual"]))
 
     conn.commit()
     conn.close()
