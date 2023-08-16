@@ -13,7 +13,8 @@ class Item(BaseModel):
     bruto: int
     release: str
     total: int           
-    studio: str             
+    studio: str  
+    mes: str           
 
 app = FastAPI()
 
@@ -22,7 +23,7 @@ app = FastAPI()
 async def agregar_elemento(item: Item):
     conn = sqlite3.connect("films.db")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO peliculas (posicion, pelicula, bruto, release, total, studio) VALUES (?, ?, ?, ?, ?, ?)", (item.posicion, item.pelicula, item.bruto, item.release, item.total, item.studio))
+    cursor.execute("INSERT INTO peliculas (posicion, pelicula, bruto, release, total, studio) VALUES (?, ?, ?, ?, ?, ?, ?)", (item.posicion, item.pelicula, item.bruto, item.release, item.total, item.studio, item.studio))
     conn.commit()
     conn.close()
     return {"mensaje": "Datos agregados exitosamente"}
@@ -37,7 +38,7 @@ async def leer_elementos():
     conn.close()
     if resultados:
         return [{"Posicion": resultado[0], "Pelicula": resultado[1], "Ingreso Bruto": resultado[2], "Fecha de estreno": f"{resultado[3]} / 2023"
-                  , "Ingreso total": resultado[4], "Distribuidora": resultado[5]} for resultado in resultados]
+                  , "Ingreso total": resultado[4], "Distribuidora": resultado[5], "Mes actual": resultado[6]} for resultado in resultados]
     else:
         return {"mensaje": "No hay datos en la base de datos"}
 
@@ -51,7 +52,7 @@ async def leer_elemento(id: int):
     conn.close()
     if resultado is not None:
         return {"Posicion": resultado[0], "Pelicula": resultado[1], "Ingreso Bruto": resultado[2], "Fecha de estreno": f"{resultado[3]} / 2023"
-                  , "Ingreso total": resultado[4], "Distribuidora": resultado[5]}
+                  , "Ingreso total": resultado[4], "Distribuidora": resultado[5], "Mes Actual": resultado[6]}
     else:
         return {"mensaje": "Datos no encontrados"}
 
@@ -60,7 +61,7 @@ async def leer_elemento(id: int):
 async def actualizar_elemento(id: int, item: Item):
     conn = sqlite3.connect("films.db")
     cursor = conn.cursor()
-    cursor.execute("UPDATE peliculas SET posicion=?, pelicula=?, bruto=? , total=? , studio=? , bruto=? WHERE id=?", (item.posicion, item.pelicula, item.bruto, item.release, item.total, item.studio, id))
+    cursor.execute("UPDATE peliculas SET posicion=?, pelicula=?, bruto=? , release=? , total=? , studio=? WHERE id=?", (item.posicion, item.pelicula, item.bruto, item.release, item.total, item.studio, id))
     conn.commit()
     conn.close()
     return {"mensaje": "Datos actualizados exitosamente"}
